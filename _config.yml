@@ -19,6 +19,8 @@ jekyll-archives:
     category: /categories/:name/
     tag: /tags/:name/
 
+permalink: /:categories/:title/
+
 collections:
   posts:
     output: true

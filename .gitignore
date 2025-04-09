@@ -5,3 +5,4 @@ Gemfile.lock
 .jekyll-cache
 .jekyll-cache
 node_modules
+temp_post
