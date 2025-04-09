@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Home
+title: home
 ---
 
 <h1>📚 최근 포스트</h1>

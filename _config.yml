@@ -1,22 +1,20 @@
 title: Socketing Reactoring Dev Log
 description: Socketing 프로젝트 리팩토링 과정을 기록합니다.
-baseurl: ""
-url: "https://socketing-refactoring.github.io"
+baseurl: ''
+url: 'https://socketing-refactoring.github.io'
 
-theme: jekyll-theme-cayman
+google_analytics:
 
 plugins:
-  - jekyll-tagging
   - jekyll-archives
-
-tag_page_layout: tag
-tag_permalink_style: pretty
 
 jekyll-archives:
   enabled:
     - categories
     - tags
-  layout: archive
+  layouts:
+    category: category_archives
+    tag: tag_archives
   permalinks:
     category: /categories/:name/
     tag: /tags/:name/
@@ -29,7 +27,7 @@ collections:
 
 defaults:
   - scope:
-      path: ""
+      path: ''
       type: posts
     values:
       layout: post
