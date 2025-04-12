@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>API 문서</title>
+<title>이메일 유효성 오류</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -435,115 +435,292 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
-<body class="book toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>API 문서</h1>
-<div class="details">
-<span id="revnumber">version 0.0.1-SNAPSHOT</span>
-</div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_회원가입">회원가입</a>
-<ul class="sectlevel2">
-<li><a href="#_http_요청">HTTP 요청</a></li>
-<li><a href="#_http_성공_응답">HTTP 성공 응답</a></li>
-<li><a href="#_http_실패_응답">HTTP 실패 응답</a>
-<ul class="sectlevel3">
-<li><a href="#_유효성_오류">유효성 오류</a></li>
-<li><a href="#_중복_오류">중복 오류</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_로그인">로그인</a>
-<ul class="sectlevel2">
-<li><a href="#_http_요청_2">HTTP 요청</a></li>
-<li><a href="#_http_성공_응답_2">HTTP 성공 응답</a></li>
-<li><a href="#_http_실패_응답_2">HTTP 실패 응답</a>
-<ul class="sectlevel3">
-<li><a href="#_유효성_오류_2">유효성 오류</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_회원가입"><a class="link" href="#_회원가입">회원가입</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_http_요청"><a class="link" href="#_http_요청">HTTP 요청</a></h3>
+<div class="sect4">
+<h5 id="_이메일_유효성_오류">이메일 유효성 오류</h5>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-request.adoc[]</p>
+<p>회원가입 시 이메일이 유효성 검사에 실패하는 경우 발생하는 오류입니다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>blank</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "email",
+    "value" : "",
+    "reason" : "이메일은 필수입니다."
+  } ]
+}</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_http_성공_응답"><a class="link" href="#_http_성공_응답">HTTP 성공 응답</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>null</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "email",
+    "value" : "",
+    "reason" : "이메일은 필수입니다."
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>pattern</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "email",
+    "value" : "invalid-email",
+    "reason" : "이메일을 형식에 맞게 입력해 주세요."
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>size</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "email",
+    "value" : "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa@example.com",
+    "reason" : "이메일을 50자 이하로 입력해 주세요."
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_이름_유효성_오류">이름 유효성 오류</h5>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-response.adoc[]</p>
+<p>회원가입 시 이름이 유효성 검사에 실패하는 경우 발생하는 오류입니다.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>blank</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "name",
+    "value" : "",
+    "reason" : "이름은 필수입니다."
+  } ]
+}</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_http_실패_응답"><a class="link" href="#_http_실패_응답">HTTP 실패 응답</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>null</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "name",
+    "value" : "",
+    "reason" : "이름은 필수입니다."
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>size</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "name",
+    "value" : "aaaaaaaaaaaaaaaaaaaaa",
+    "reason" : "이름을 20자 이하로 입력해 주세요."
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_닉네임_유효성_오류">닉네임 유효성 오류</h5>
 <div class="paragraph">
-<p>회원가입 실패 시 발생할 수 있는 오류들을 분류하여 설명합니다.</p>
+<p>회원가입 시 닉네임이 유효성 검사에 실패하는 경우 발생하는 오류입니다.</p>
 </div>
-<div class="sect3">
-<h4 id="_유효성_오류"><a class="link" href="#_유효성_오류">유효성 오류</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>blank</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "nickname",
+    "value" : "",
+    "reason" : "닉네임은 필수입니다."
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>null</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "nickname",
+    "value" : "",
+    "reason" : "닉네임은 필수입니다."
+  } ]
+}</code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>size</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "nickname",
+    "value" : "aaaaaaaaaaaaaaaaaaaaa",
+    "reason" : "닉네임을 20자 이하로 입력해 주세요."
+  } ]
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_비밀번호_유효성_오류">비밀번호 유효성 오류</h5>
 <div class="paragraph">
-<p>회원가입 요청 데이터의 유효성 검사 실패 응답입니다.</p>
+<p>회원가입 시 비밀번호가 유효성 검사에 실패하는 경우 발생하는 오류입니다.</p>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-response-validation.adoc[]</p>
+<div class="ulist">
+<ul>
+<li>
+<p>blank</p>
+</li>
+</ul>
 </div>
-</div>
-<div class="sect3">
-<h4 id="_중복_오류"><a class="link" href="#_중복_오류">중복 오류</a></h4>
-<div class="paragraph">
-<p>회원가입 요청 데이터의 중복 예외로 인한 실패 응답입니다.</p>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-response-duplication.adoc[]</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_로그인"><a class="link" href="#_로그인">로그인</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_http_요청_2"><a class="link" href="#_http_요청_2">HTTP 요청</a></h3>
-<div class="paragraph">
-<p>회원가입 요청에 대한 설명입니다.</p>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::login-request.adoc[]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "password",
+    "value" : "",
+    "reason" : "비밀번호는 필수입니다."
+  } ]
+}</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_http_성공_응답_2"><a class="link" href="#_http_성공_응답_2">HTTP 성공 응답</a></h3>
-<div class="paragraph">
-<p>회원가입 성공 시 반환되는 응답입니다.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>null</p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::login-response.adoc[]</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "password",
+    "value" : "",
+    "reason" : "비밀번호는 필수입니다."
+  } ]
+}</code></pre>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_http_실패_응답_2"><a class="link" href="#_http_실패_응답_2">HTTP 실패 응답</a></h3>
-<div class="sect3">
-<h4 id="_유효성_오류_2"><a class="link" href="#_유효성_오류_2">유효성 오류</a></h4>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::login-response-validation.adoc[]</p>
+<div class="ulist">
+<ul>
+<li>
+<p>size</p>
+</li>
+</ul>
 </div>
-</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "요청 데이터를 모두 올바르게 입력했는지 확인해 주세요.",
+  "code" : "C_001",
+  "errors" : [ {
+    "field" : "password",
+    "value" : "aaaaaaaaaaaaaaaaaaaaa",
+    "reason" : "비밀번호를 20자 이하로 입력해 주세요."
+  } ]
+}</code></pre>
 </div>
 </div>
 </div>
@@ -551,15 +728,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2025-04-12 21:19:16 +0900
+Last updated 2025-04-12 21:11:45 +0900
 </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
-<script>
-if (!hljs.initHighlighting.called) {
-  hljs.initHighlighting.called = true
-  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
-}
-</script>
 </body>
 </html>

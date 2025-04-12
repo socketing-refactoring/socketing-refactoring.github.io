@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.18">
-<title>API 문서</title>
+<title>Untitled</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -435,131 +435,134 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
-<body class="book toc2 toc-left">
+<body class="article">
 <div id="header">
-<h1>API 문서</h1>
-<div class="details">
-<span id="revnumber">version 0.0.1-SNAPSHOT</span>
-</div>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_회원가입">회원가입</a>
-<ul class="sectlevel2">
-<li><a href="#_http_요청">HTTP 요청</a></li>
-<li><a href="#_http_성공_응답">HTTP 성공 응답</a></li>
-<li><a href="#_http_실패_응답">HTTP 실패 응답</a>
-<ul class="sectlevel3">
-<li><a href="#_유효성_오류">유효성 오류</a></li>
-<li><a href="#_중복_오류">중복 오류</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#_로그인">로그인</a>
-<ul class="sectlevel2">
-<li><a href="#_http_요청_2">HTTP 요청</a></li>
-<li><a href="#_http_성공_응답_2">HTTP 성공 응답</a></li>
-<li><a href="#_http_실패_응답_2">HTTP 실패 응답</a>
-<ul class="sectlevel3">
-<li><a href="#_유효성_오류_2">유효성 오류</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_회원가입"><a class="link" href="#_회원가입">회원가입</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_http_요청"><a class="link" href="#_http_요청">HTTP 요청</a></h3>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-request.adoc[]</p>
+<p>HTTP Response</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-http" data-lang="http">HTTP/1.1 201 Created
+Vary: Origin
+Vary: Access-Control-Request-Method
+Vary: Access-Control-Request-Headers
+Location: /api/v1/members/04d11277-2362-4029-a0ab-f8ad8e4f9980
+Content-Type: application/json
+Content-Length: 255
+
+{
+  "message" : "회원가입이 성공적으로 이루어졌습니다.",
+  "code" : "0",
+  "data" : {
+    "id" : "04d11277-2362-4029-a0ab-f8ad8e4f9980",
+    "name" : "이름",
+    "nickname" : "닉네임",
+    "email" : "email@example.com"
+  }
+}</code></pre>
 </div>
-<div class="sect2">
-<h3 id="_http_성공_응답"><a class="link" href="#_http_성공_응답">HTTP 성공 응답</a></h3>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-response.adoc[]</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_http_실패_응답"><a class="link" href="#_http_실패_응답">HTTP 실패 응답</a></h3>
-<div class="paragraph">
-<p>회원가입 실패 시 발생할 수 있는 오류들을 분류하여 설명합니다.</p>
-</div>
-<div class="sect3">
-<h4 id="_유효성_오류"><a class="link" href="#_유효성_오류">유효성 오류</a></h4>
-<div class="paragraph">
-<p>회원가입 요청 데이터의 유효성 검사 실패 응답입니다.</p>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-response-validation.adoc[]</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_중복_오류"><a class="link" href="#_중복_오류">중복 오류</a></h4>
-<div class="paragraph">
-<p>회원가입 요청 데이터의 중복 예외로 인한 실패 응답입니다.</p>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::join-response-duplication.adoc[]</p>
+<p>Response Headers</p>
 </div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_로그인"><a class="link" href="#_로그인">로그인</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_http_요청_2"><a class="link" href="#_http_요청_2">HTTP 요청</a></h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Name</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Location</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">생성된 리소스의 URI</p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p>회원가입 요청에 대한 설명입니다.</p>
+<p>Response Body</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight nowrap"><code class="language-json" data-lang="json">{
+  "message" : "회원가입이 성공적으로 이루어졌습니다.",
+  "code" : "0",
+  "data" : {
+    "id" : "04d11277-2362-4029-a0ab-f8ad8e4f9980",
+    "name" : "이름",
+    "nickname" : "닉네임",
+    "email" : "email@example.com"
+  }
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
-<p>Unresolved directive in index.adoc - include::login-request.adoc[]</p>
+<p>Response Fields</p>
 </div>
-</div>
-<div class="sect2">
-<h3 id="_http_성공_응답_2"><a class="link" href="#_http_성공_응답_2">HTTP 성공 응답</a></h3>
-<div class="paragraph">
-<p>회원가입 성공 시 반환되는 응답입니다.</p>
-</div>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::login-response.adoc[]</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_http_실패_응답_2"><a class="link" href="#_http_실패_응답_2">HTTP 실패 응답</a></h3>
-<div class="sect3">
-<h4 id="_유효성_오류_2"><a class="link" href="#_유효성_오류_2">유효성 오류</a></h4>
-<div class="paragraph">
-<p>Unresolved directive in index.adoc - include::login-response-validation.adoc[]</p>
-</div>
-</div>
-</div>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Path</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>code</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성공 코드</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>message</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">성공 메시지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Object</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">응답 값</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.name</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 이름</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.nickname</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 닉네임</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>data.email</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원 이메일</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2025-04-12 21:19:16 +0900
+Last updated 2025-04-12 20:57:10 +0900
 </div>
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
-<script>
-if (!hljs.initHighlighting.called) {
-  hljs.initHighlighting.called = true
-  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
-}
-</script>
 </body>
 </html>
