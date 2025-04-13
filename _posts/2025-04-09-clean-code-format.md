@@ -2,7 +2,7 @@
 title: '[Clean Code] 07장 형식 맞추기'
 date: 2025-04-09
 categories: [Reference]
-tags: [reference, java, formatting & linting, clean code, collaboration]
+tags: [Reference, Java, Formatting, Clean code, Collaboration]
 ---
 
 <div style="padding: 1rem">
