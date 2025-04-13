@@ -1,5 +1,5 @@
 ---
-title: '문서화와 통합 테스트: Swagger, Spring Rest Docs'
+title: '통합 테스트를 이용하여 API 문서화 자동화하기: Swagger, Spring Rest Docs'
 date: 2025-04-13
 categories: [Documentation]
 tags: [Java, Gradle, Collaboration, Git, Test, MSA]
