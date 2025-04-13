@@ -3,13 +3,21 @@ layout: default
 title: home
 ---
 
-<h1>📚 최근 포스트</h1>
-
+<h2>Spring Rest Docs API 문서</h2>
 <ul>
-  {% for post in site.posts %}
+  <li>
+    <a href="/docs/member-service/">Member Service</a>
+  </li>
+</ul>
+
+<h2>
+<ul>
+  {% for category in site.categories %}
     <li>
-      <a href="{{ post.url }}">{{ post.title }}</a>
-      <small> - {{ post.date | date: "%Y-%m-%d" }}</small>
+      <a href="/categories/{{ category[0] | slugify }}/">{{ category[0] }}</a>
+      ({{ category[1].size }} posts)
     </li>
   {% endfor %}
 </ul>
+</h2>
+
