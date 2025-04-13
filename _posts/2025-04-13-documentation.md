@@ -23,7 +23,7 @@ Spring Rest Docs를 이용하면 통합 테스트를 통해 실제 API를 100%�
 ## 1. Swagger 문서화
 
 ### Gradle 설정
-다음과 같이 의존성을 추가해주고 Sprint boot를 실행한 뒤 `/swagger-ui/index.html`에 접속하면  
+다음과 같이 의존성을 추가해주고 Spring boot를 실행한 뒤 `/swagger-ui/index.html`에 접속하면  
 Controller 소스 코드에 작성한 API들을 바탕으로 자동 생성된 Swagger Api 문서를 확인할 수 있습니다.
 
 - Gradle 의존성 추가
