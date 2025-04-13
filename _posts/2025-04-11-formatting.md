@@ -30,7 +30,7 @@ Javascript, Typescript 프로젝트에서의 코드 포맷팅 환경을 세팅�
 Javascript / Typescript 프로젝트 환경과 비교했을 때 Spring boot 프로젝트 환경에서의 코드 포맷팅 방법은
 어떻게 다른지 그리고 해당 포맷팅 방법을 선택한 이유가 무엇인지를 중점적으로 정리해보려고 합니다.
 
-## 1. Java 코드 스타일 설정 (Google Code Style 사용)
+## 1. Java 코드 스타일 설정
 
 Javascript / Typescript 프로젝트에서는 `.prettierrc` 파일에 코드 스타일 규칙을 설정했었습니다.
 
@@ -100,7 +100,7 @@ IDE가 eclipse인지 intellij인지에 따라 차이가 있습니다.
   </ul>
 </details>
 
-## 2. Java 코드 스타일 적용 (Spotless 사용)
+## 2. Java 코드 스타일 적용
 
 Javascript / Typescript 프로젝트에서는 IDE의 자동 포맷팅 기능을 사용할 수도 있지만
 prettier를 이용하면 IDE의 도움 없이 `npx prettier --write .` 명령어로도 `.prettierrc` 파일에서 설정한 코드 스타일을 적용할 수 있습니다.
@@ -139,7 +139,7 @@ Spotless의 Gradle plugin 항목 문서에는 커스텀 `.xml` 설정 파일을 
 
 > Spotless 공식 문서 [https://github.com/diffplug/spotless/tree/main/plugin-gradle#java](https://github.com/diffplug/spotless/tree/main/plugin-gradle#java)
 
-## 3. Java 코드 스타일 적용 자동화 (Spotless와 pre-commit 사용용)
+## 3. Java 코드 스타일 적용 자동화
 
 Javascript / Typescript 프로젝트에서는 IDE의 도움 없이 prettier 명령어로도 코드 스타일 자동 적용이 가능하기 때문에
 pre-commit hook 스크립트를 통해 커밋 단계에서 코드 스타일 적용을 강제/자동화할 수 있었습니다.
@@ -169,7 +169,7 @@ repos:
 
 이로써 협업 환경에서 일관된 Java 코드 스타일을 적용할 수 있는 환경을 마련하였습니다.
 
-## 4. 추가적인 Java 코드 스타일 검사 (Checkstyle)
+## 4. 추가적인 Java 코드 스타일 검사
 
 `spotlessJavaApply` 태스크는 Java 코드를 스타일 가이드에 맞게 잘 수정해주지만
 디테일한 규칙은 수정해주지 못하는 것으로 확인됐습니다.  
