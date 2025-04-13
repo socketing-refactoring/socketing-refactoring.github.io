@@ -2,7 +2,7 @@
 title: '문서화와 통합 테스트: Swagger, Spring Rest Docs'
 date: 2025-04-13
 categories: [Documentation]
-tags: [MSA, Docs Test, collaboration]
+tags: [Java, Gradle, Collaboration, Git, Test, MSA]
 ---
 
 ## 도입 배경
