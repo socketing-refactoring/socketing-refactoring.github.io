@@ -11,7 +11,7 @@ title: home
   </li>
 </ul>
 
-<h2>📚 최근 포스트</h2>
+<h2>최근 포스트</h2>
 
 <ul>
   {% for post in site.posts %}
