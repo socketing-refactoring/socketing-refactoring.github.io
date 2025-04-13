@@ -21,6 +21,15 @@ layout: default
   </p>
 
   <div class="post-content">
+
+    <div class="toc-wrapper">
+      <div class="toc-container" id="tocContainer">
+        <p>목차</p>
+        {% include toc.html html=content %}
+      </div>
+      <button class="toc-toggle-btn" id="tocToggleBtn">더 보기</button>
+    </div>
+
     {{ content }}
   </div>
 </article>
@@ -28,3 +37,5 @@ layout: default
 <hr>
 
 <p><a href="{{ "/" | relative_url }}">← 돌아가기</a></p>
+
+<script src="{{ '/assets/js/toc-toggle.js' | relative_url }}"></script>

@@ -2,3 +2,63 @@
 ---
 
 @import 'jekyll-theme-cayman';
+
+.toc-wrapper {
+    margin: 1rem 0;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    padding: 0.4rem;
+  }
+  
+  .toc-container {
+    padding: 1rem 1.2rem;
+    max-height: 200px;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .toc-container.expanded {
+    max-height: 1000px;
+  }
+  
+  .toc-container > p {
+    margin-bottom: 0;
+  }
+  
+  .toc-container ul {
+    list-style: none;
+    margin: 0;
+    padding-top: 0.4rem;
+    padding-left: 0;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .toc-container li {
+    margin: 0.4em 0;
+    padding-left: 0;
+  }
+  
+  .toc-container ul ul {
+    margin-left: 1rem;
+    border-left: 2px solid #e0e0e0;
+    padding-left: 0.8rem;
+  }
+  
+  .toc-toggle-btn {
+    display: block;
+    margin: 0.5rem auto 0;
+    background: none;
+    border: none;
+    color: #1e90ff;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 0;
+    text-align: center;
+  }
+  
+  .toc-toggle-btn:hover {
+    text-decoration: underline;
+  }
+  

@@ -20,9 +20,9 @@ Spring Rest Docs를 이용하면 통합 테스트를 통해 실제 API를 100%�
 이 문서를 Swagger 문서 스펙으로 변환하는 것도 가능하다는 것을 알게 됐습니다.  
 그래서 이번 프로젝트에서는 Spring boot에 문서화 환경을 이 방법으로 직접 세팅해보았습니다.
    
-## 1. Swagger 문서화 세팅
+## 1. Swagger 문서화
 
-### Swagger 문서 자동 생성
+### Gradle 설정
 다음과 같이 의존성을 추가해주고 Sprint boot를 실행한 뒤 `/swagger-ui/index.html`에 접속하면  
 Controller 소스 코드에 작성한 API들을 바탕으로 자동 생성된 Swagger Api 문서를 확인할 수 있습니다.
 
@@ -63,7 +63,7 @@ springdoc:
     display-request-duration: true
 ```
 
-### 마이크로 서비스 환경에서 Swagger 설정 (Java 코드로 설정)
+### 마이크로 서비스를 위한 설정
   
 Java 코드로도 Swagger 설정을 커스텀할 수 있습니다.  
 저는 마이크로 서비스 환경에 맞게 Swagger에서 보내는 요청이 마이크로 서비스 서버로 바로 가지 않고
@@ -124,7 +124,7 @@ springdoc:
 
 ![swagger-source](/assets/images/swagger-source.png)
 
-### 애노테이션 방식과 직접 문서를 생성하는 방식
+### 애노테이션 추가 방식과 문서 작성 방식
 
 Swagger가 자동으로 문서를 생성해주기는 하지만 description이나 example 그리고 예외 응답들을 관리하려면 추가적인 작업이 필요합니다.
 소스 코드에 애노테이션을 추가하거나
@@ -150,7 +150,7 @@ springdoc:
     url: /{file name}.yml    # also can use json
 ``` 
 
-## 2. Spring Rest Docs
+## 2. Spring Rest Docs 문서화
 
 이번에는 Spring Rest Docs로 문서를 생성하는 방법입니다.
 Swagger 문서는 장점이 정말 많지만 자세한 설명을 추가하려고 하면 main 코드를 건들여야 되거나 문서를 직접 작성해야 한다는 점이 단점으로 다가옵니다.  
@@ -226,7 +226,7 @@ tasks.named<BootJar>("bootJar") { // need to import BootJar class
 }
 ```
 
-### adoc 파일 생성
+### adoc 문서 작성
 
 이 설정대로 문서를 생성하려면 `src/docs/asciidoc` 위치에 문서의 형태가 될 `index.adoc`을 작성해두어야 합니다.
 저는 `index.adoc`가 너무 길어지는 것을 방지하기 위해 `index.adoc`에서 개별 `.adoc` 파일들을 include하는 방식을 선택했습니다. AsciidoctorTask가 include된 adoc을 정상적으로 처리할 수 있게 하려면 위 설정처럼 `baseDirFollowsSourceFile()`를 꼭 추가해주어야 합니다.  
@@ -398,6 +398,8 @@ Host: localhost:8080
 
 마이크로 서비스에 접속하지 않고도 문서를 확인하고 싶거나 이  문서를 중앙집중식으로 관리하고 싶다면 Gradle의 git publish 플러그인을 이용할 수 있습니다.  
 
+### Gradle 설정
+
 > 레퍼런스  
 네이버 핵데이 행사 리포지토리 [https://github.com/naver/hackday-conventions-java/blob/master/build.gradle](https://github.com/naver/hackday-conventions-java/blob/master/build.gradle)
 
@@ -441,10 +443,11 @@ gitPublish {
 
 [https://socketing-refactoring.github.io/docs/member-service/](https://socketing-refactoring.github.io/docs/member-service/)
 
-## 4. Asciidoc To Swagger
+## 4. Spring Rest Docs To Swagger
 
 Spring Rest Docs를 통해 실제 Api와 100% 호환되는 API 문서를 생성하였습니다. 그러나 asciidoc 문서는 Api 테스트가 어렵다는 점이 아쉽습니다.  
-이에 Asciidoc을 Swagger 문서로 변환하는 플러그인을 적용해보려고 합니다.
+이에 Spring Rest Docs 문서를 Swagger 문서로 변환하는 플러그인을 적용해보려고 합니다.
+
 > 레퍼런스  
 카카오페이 기술 블로그 [https://tech.kakaopay.com/post/openapi-documentation/](https://tech.kakaopay.com/post/openapi-documentation/)  
 Velog [ssongkim's devlog](https://velog.io/@suhongkim98/spring-Rest-Docs-Swagger-UI%EB%A1%9C-MSA-%ED%99%98%EA%B2%BD%EC%97%90%EC%84%9C-API-%EB%AC%B8%EC%84%9C-%ED%86%B5%ED%95%A9-%EA%B4%80%EB%A6%AC%ED%95%98%EA%B8%B0)
