@@ -51,6 +51,15 @@
   </p>
 
   <div class="post-content">
+
+    <div class="toc-wrapper">
+      <div class="toc-container" id="tocContainer">
+        <p>목차</p>
+        <ul><li><a href="#요약">요약</a></li><li><a href="#도입-배경">도입 배경</a></li><li><a href="#1-java-코드-스타일-설정-google-code-style-사용">1. Java 코드 스타일 설정 (Google Code Style 사용)</a></li><li><a href="#2-java-코드-스타일-적용-spotless-사용">2. Java 코드 스타일 적용 (Spotless 사용)</a></li><li><a href="#3-java-코드-스타일-적용-자동화-spotless와-pre-commit-사용용">3. Java 코드 스타일 적용 자동화 (Spotless와 pre-commit 사용용)</a></li><li><a href="#4-추가적인-java-코드-스타일-검사-checkstyle">4. 추가적인 Java 코드 스타일 검사 (Checkstyle)</a><ul><li><a href="#checkstyle-검사-결과-예시">Checkstyle 검사 결과 예시</a></li><li><a href="#checkstyle-플러그인-추가">Checkstyle 플러그인 추가</a></li><li><a href="#checkstyle-설정-파일-추가">Checkstyle 설정 파일 추가</a></li><li><a href="#check-규칙-커스텀">Check 규칙 커스텀</a></li></ul></li><li><a href="#5-기타-언어-및-파일-포맷팅-자동화">5. 기타 언어 및 파일 포맷팅 자동화</a></li><li><a href="#최종-리뷰">최종 리뷰</a></li></ul>
+      </div>
+      <button class="toc-toggle-btn" id="tocToggleBtn">더 보기</button>
+    </div>
+
     <h2 id="요약">요약</h2>
 <p>Gradle의 플러그인 Spotless, Checkstyle, editorconfig와 pre-commit을 이용하여 코드 스타일 적용 자동화 환경을 구축했습니다.</p>
 
@@ -480,6 +489,8 @@ Spotless 공식 문서 <a href="https://github.com/diffplug/spotless/tree/main/p
 <hr>
 
 <p><a href="/">← 돌아가기</a></p>
+
+<script src="/assets/js/toc-toggle.js"></script>
 
 
       <footer class="site-footer">
