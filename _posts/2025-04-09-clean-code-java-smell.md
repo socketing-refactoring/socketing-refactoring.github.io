@@ -2,7 +2,7 @@
 title: '[Clean Code] 17장 냄새와 휴리스틱 - Java'
 date: 2025-04-09
 categories: [Reference]
-tags: [reference, java, formatting & linting, clean code, collaboration]
+tags: [Java, Formatting, Clean code, Collaboration]
 ---
 
 ### J1: 긴 import 목록을 피하고 와일드카드를 사용하라
