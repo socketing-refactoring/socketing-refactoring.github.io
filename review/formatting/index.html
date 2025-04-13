@@ -55,7 +55,7 @@
     <div class="toc-wrapper">
       <div class="toc-container" id="tocContainer">
         <p>목차</p>
-        <ul><li><a href="#요약">요약</a></li><li><a href="#도입-배경">도입 배경</a></li><li><a href="#1-java-코드-스타일-설정-google-code-style-사용">1. Java 코드 스타일 설정 (Google Code Style 사용)</a></li><li><a href="#2-java-코드-스타일-적용-spotless-사용">2. Java 코드 스타일 적용 (Spotless 사용)</a></li><li><a href="#3-java-코드-스타일-적용-자동화-spotless와-pre-commit-사용용">3. Java 코드 스타일 적용 자동화 (Spotless와 pre-commit 사용용)</a></li><li><a href="#4-추가적인-java-코드-스타일-검사-checkstyle">4. 추가적인 Java 코드 스타일 검사 (Checkstyle)</a><ul><li><a href="#checkstyle-검사-결과-예시">Checkstyle 검사 결과 예시</a></li><li><a href="#checkstyle-플러그인-추가">Checkstyle 플러그인 추가</a></li><li><a href="#checkstyle-설정-파일-추가">Checkstyle 설정 파일 추가</a></li><li><a href="#check-규칙-커스텀">Check 규칙 커스텀</a></li></ul></li><li><a href="#5-기타-언어-및-파일-포맷팅-자동화">5. 기타 언어 및 파일 포맷팅 자동화</a></li><li><a href="#최종-리뷰">최종 리뷰</a></li></ul>
+        <ul><li><a href="#요약">요약</a></li><li><a href="#도입-배경">도입 배경</a></li><li><a href="#1-java-코드-스타일-설정">1. Java 코드 스타일 설정</a></li><li><a href="#2-java-코드-스타일-적용">2. Java 코드 스타일 적용</a></li><li><a href="#3-java-코드-스타일-적용-자동화">3. Java 코드 스타일 적용 자동화</a></li><li><a href="#4-추가적인-java-코드-스타일-검사">4. 추가적인 Java 코드 스타일 검사</a><ul><li><a href="#checkstyle-검사-결과-예시">Checkstyle 검사 결과 예시</a></li><li><a href="#checkstyle-플러그인-추가">Checkstyle 플러그인 추가</a></li><li><a href="#checkstyle-설정-파일-추가">Checkstyle 설정 파일 추가</a></li><li><a href="#check-규칙-커스텀">Check 규칙 커스텀</a></li></ul></li><li><a href="#5-기타-언어-및-파일-포맷팅-자동화">5. 기타 언어 및 파일 포맷팅 자동화</a></li><li><a href="#최종-리뷰">최종 리뷰</a></li></ul>
       </div>
       <button class="toc-toggle-btn" id="tocToggleBtn">더 보기</button>
     </div>
@@ -85,7 +85,7 @@ Javascript, Typescript 프로젝트에서의 코드 포맷팅 환경을 세팅�
 Javascript / Typescript 프로젝트 환경과 비교했을 때 Spring boot 프로젝트 환경에서의 코드 포맷팅 방법은
 어떻게 다른지 그리고 해당 포맷팅 방법을 선택한 이유가 무엇인지를 중점적으로 정리해보려고 합니다.</p>
 
-<h2 id="1-java-코드-스타일-설정-google-code-style-사용">1. Java 코드 스타일 설정 (Google Code Style 사용)</h2>
+<h2 id="1-java-코드-스타일-설정">1. Java 코드 스타일 설정</h2>
 
 <p>Javascript / Typescript 프로젝트에서는 <code class="language-plaintext highlighter-rouge">.prettierrc</code> 파일에 코드 스타일 규칙을 설정했었습니다.</p>
 
@@ -153,7 +153,7 @@ IDE가 eclipse인지 intellij인지에 따라 차이가 있습니다. <br />
   </ul>
 </details>
 
-<h2 id="2-java-코드-스타일-적용-spotless-사용">2. Java 코드 스타일 적용 (Spotless 사용)</h2>
+<h2 id="2-java-코드-스타일-적용">2. Java 코드 스타일 적용</h2>
 
 <p>Javascript / Typescript 프로젝트에서는 IDE의 자동 포맷팅 기능을 사용할 수도 있지만
 prettier를 이용하면 IDE의 도움 없이 <code class="language-plaintext highlighter-rouge">npx prettier --write .</code> 명령어로도 <code class="language-plaintext highlighter-rouge">.prettierrc</code> 파일에서 설정한 코드 스타일을 적용할 수 있습니다.</p>
@@ -193,7 +193,7 @@ prettier를 이용하면 IDE의 도움 없이 <code class="language-plaintext hi
   <p>Spotless 공식 문서 <a href="https://github.com/diffplug/spotless/tree/main/plugin-gradle#java">https://github.com/diffplug/spotless/tree/main/plugin-gradle#java</a></p>
 </blockquote>
 
-<h2 id="3-java-코드-스타일-적용-자동화-spotless와-pre-commit-사용용">3. Java 코드 스타일 적용 자동화 (Spotless와 pre-commit 사용용)</h2>
+<h2 id="3-java-코드-스타일-적용-자동화">3. Java 코드 스타일 적용 자동화</h2>
 
 <p>Javascript / Typescript 프로젝트에서는 IDE의 도움 없이 prettier 명령어로도 코드 스타일 자동 적용이 가능하기 때문에
 pre-commit hook 스크립트를 통해 커밋 단계에서 코드 스타일 적용을 강제/자동화할 수 있었습니다.</p>
@@ -224,7 +224,7 @@ pre-commit 설정 파일에 <code class="language-plaintext highlighter-rouge">.
 
 <p>이로써 협업 환경에서 일관된 Java 코드 스타일을 적용할 수 있는 환경을 마련하였습니다.</p>
 
-<h2 id="4-추가적인-java-코드-스타일-검사-checkstyle">4. 추가적인 Java 코드 스타일 검사 (Checkstyle)</h2>
+<h2 id="4-추가적인-java-코드-스타일-검사">4. 추가적인 Java 코드 스타일 검사</h2>
 
 <p><code class="language-plaintext highlighter-rouge">spotlessJavaApply</code> 태스크는 Java 코드를 스타일 가이드에 맞게 잘 수정해주지만
 디테일한 규칙은 수정해주지 못하는 것으로 확인됐습니다.</p>
@@ -493,9 +493,11 @@ Spotless 공식 문서 <a href="https://github.com/diffplug/spotless/tree/main/p
 <script src="/assets/js/toc-toggle.js"></script>
 
 
+      <button id="topBtn" title="Go to top">↑ Top</button>
       <footer class="site-footer">
         <p>&copy; 2025 Socketing Reactoring Dev Log. Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a>.</p>
       </footer>
     </main>
+    <script src="/assets/js/top-button.js"></script>
   </body>
 </html>

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 /**
  * 1. Set default font family to sans-serif.
@@ -1062,6 +1063,28 @@ a:hover {
 
 .toc-toggle-btn:hover {
   text-decoration: underline;
+}
+
+#topBtn {
+  display: none; /* 초기에는 숨김 */
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  z-index: 99;
+  font-size: 16px;
+  background-color: #333;
+  color: white;
+  border: none;
+  outline: none;
+  padding: 12px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s;
+}
+
+#topBtn:hover {
+  background-color: #555;
 }
 
 /*# sourceMappingURL=style.css.map */
