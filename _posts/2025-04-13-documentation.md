@@ -1,6 +1,6 @@
 ---
 title: '문서화와 통합 테스트: Swagger, Spring Rest Docs'
-date: 2025-04-11
+date: 2025-04-13
 categories: [Documentation]
 tags: [MSA, Docs Test, collaboration]
 ---
@@ -69,7 +69,7 @@ Java 코드로도 Swagger 설정을 커스텀할 수 있습니다.
 저는 마이크로 서비스 환경에 맞게 Swagger에서 보내는 요청이 마이크로 서비스 서버로 바로 가지 않고
 Nginx와 Spring Gateway Server가 있는 서버를 통해 마이크로 서비스로 라우팅될 수 있도록 대상 서버를 다음과 같이 바꾸어주었습니다.  
 
-```Java
+```java
 package com.jeein.member.config;
 
 import io.swagger.v3.oas.models.OpenAPI;
@@ -100,8 +100,8 @@ public class OpenApiConfig {
 마이크로 서비스들의 Swagger 문서는 api-docs.path에 등록한 경로 (또는 default인 /v3/api-docs)에 위치해 있으니 그 경로를 이용하면 됩니다.  
 저는 마이크로 서비스의 Swagger 문서를 요청할 때도 Spring Gateway Server의 라우팅을 통할 수 있도록 Spring Gateway Server의 url을 이용하였습니다.  
 
-```application.yml 
-# application.ym
+```yaml
+# application.yml
 
 springdoc:
   swagger-ui:
@@ -124,7 +124,7 @@ springdoc:
 
 ![swagger-source](/assets/images/swagger-source.png)
 
-### 애노테이션 방식과 `yml` 방식
+### 애노테이션 방식과 직접 문서를 생성하는 방식
 
 Swagger가 자동으로 문서를 생성해주기는 하지만 description이나 example 그리고 예외 응답들을 관리하려면 추가적인 작업이 필요합니다.
 소스 코드에 애노테이션을 추가하거나
@@ -154,7 +154,7 @@ springdoc:
 
 이번에는 Spring Rest Docs로 문서를 생성하는 방법입니다.
 Swagger 문서는 장점이 정말 많지만 자세한 설명을 추가하려고 하면 main 코드를 건들여야 되거나 문서를 직접 작성해야 한다는 점이 단점으로 다가옵니다.  
-Spring Rest Docs의 경우 test 코드를 작성하고 나서 테스트에 성공하고 나면 자동으로 Http 요청과 응답 snippet을 생성할 수 있습니다.  
+Spring Rest Docs의 경우 test 코드를 작성하고 나서 테스트에 성공하고 나면 자동으로 Http 요청과 응답 snippet을 생성할 수 있습니다.
 그리고 Gradle에서 asciidocTask를 이용하면 adoc 포맷의 문서를 html로 변환할 수도 있습니다. 
 
 테스트와 문서 작업을 통합하는 이 방식은 문서의 신뢰성도 확보하고 api가 변경될 때마다 이를 문서에 자동 반영할 수 있으며 main 소스 코드에 문서화 코드를 개입시키지 않을 수도 있어서  장점이 많은 방식입니다.  
