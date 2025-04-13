@@ -26,7 +26,7 @@
   <h1>문서화와 통합 테스트: Swagger, Spring Rest Docs</h1>
   <p>
     <small>
-      📅 2025-04-11
+      📅 2025-04-13
        | 📂 카테고리: 
         
           <a href="/categories/documentation/">Documentation</a>
@@ -113,26 +113,26 @@ API 문서의 URI, API의 정렬 순서 등을 설정할 수 있습니다. 어�
 저는 마이크로 서비스 환경에 맞게 Swagger에서 보내는 요청이 마이크로 서비스 서버로 바로 가지 않고
 Nginx와 Spring Gateway Server가 있는 서버를 통해 마이크로 서비스로 라우팅될 수 있도록 대상 서버를 다음과 같이 바꾸어주었습니다.</p>
 
-<pre><code class="language-Java">package com.jeein.member.config;
+<div class="language-java highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">package</span> <span class="nn">com.jeein.member.config</span><span class="o">;</span>
 
-import io.swagger.v3.oas.models.OpenAPI;
-import io.swagger.v3.oas.models.servers.Server;
-import java.util.List;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+<span class="kn">import</span> <span class="nn">io.swagger.v3.oas.models.OpenAPI</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">io.swagger.v3.oas.models.servers.Server</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Bean</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.springframework.context.annotation.Configuration</span><span class="o">;</span>
 
-@Configuration
-public class OpenApiConfig {
+<span class="nd">@Configuration</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OpenApiConfig</span> <span class="o">{</span>
 
-    @Bean
-    public OpenAPI customOpenAPI() {
-        Server server = new Server();
-        server.setUrl("https://api.socketing.jeein.xyz");
-        return new OpenAPI().servers(List.of(server));
+    <span class="nd">@Bean</span>
+    <span class="kd">public</span> <span class="nc">OpenAPI</span> <span class="nf">customOpenAPI</span><span class="o">()</span> <span class="o">{</span>
+        <span class="nc">Server</span> <span class="n">server</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Server</span><span class="o">();</span>
+        <span class="n">server</span><span class="o">.</span><span class="na">setUrl</span><span class="o">(</span><span class="s">"https://api.socketing.jeein.xyz"</span><span class="o">);</span>
+        <span class="k">return</span> <span class="k">new</span> <span class="nf">OpenAPI</span><span class="o">().</span><span class="na">servers</span><span class="o">(</span><span class="nc">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="n">server</span><span class="o">));</span>
     
-}
+<span class="o">}</span>
 
-</code></pre>
+</code></pre></div></div>
 
 <p>이렇게 하면 다음과 같이 Api 요청을 보낼 서버가 변경됩니다. 
 서버를 리스트로 추가할 수도 있어서 로컬용, 개발용, 운영용 서버 등 여러 서버를 등록할 수도 있습니다.</p>
@@ -143,30 +143,30 @@ public class OpenApiConfig {
 마이크로 서비스들의 Swagger 문서는 api-docs.path에 등록한 경로 (또는 default인 /v3/api-docs)에 위치해 있으니 그 경로를 이용하면 됩니다.<br />
 저는 마이크로 서비스의 Swagger 문서를 요청할 때도 Spring Gateway Server의 라우팅을 통할 수 있도록 Spring Gateway Server의 url을 이용하였습니다.</p>
 
-<pre><code class="language-application.yml"># application.ym
+<div class="language-yaml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># application.yml</span>
 
-springdoc:
-  swagger-ui:
-    path: /api/docs
-    urls[0]:
-      name: auth-service
-      url: https://api.socketing.jeein.xyz/api/v1/auth/api/json
-    urls[1]:
-      name: member-service
-      url: https://api.socketing.jeein.xyz/api/v1/members/api/json
-    urls[2]:
-      name: event-service
-      url: https://api.socketing.jeein.xyz/api/v1/events/api/json
-    urls[3]:
-      name: order-service
-      url: https://api.socketing.jeein.xyz/api/v1/orders/api/json
-</code></pre>
+<span class="na">springdoc</span><span class="pi">:</span>
+  <span class="na">swagger-ui</span><span class="pi">:</span>
+    <span class="na">path</span><span class="pi">:</span> <span class="s">/api/docs</span>
+    <span class="s">urls[0]</span><span class="err">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">auth-service</span>
+      <span class="na">url</span><span class="pi">:</span> <span class="s">https://api.socketing.jeein.xyz/api/v1/auth/api/json</span>
+    <span class="s">urls[1]</span><span class="err">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">member-service</span>
+      <span class="na">url</span><span class="pi">:</span> <span class="s">https://api.socketing.jeein.xyz/api/v1/members/api/json</span>
+    <span class="s">urls[2]</span><span class="err">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">event-service</span>
+      <span class="na">url</span><span class="pi">:</span> <span class="s">https://api.socketing.jeein.xyz/api/v1/events/api/json</span>
+    <span class="s">urls[3]</span><span class="err">:</span>
+      <span class="na">name</span><span class="pi">:</span> <span class="s">order-service</span>
+      <span class="na">url</span><span class="pi">:</span> <span class="s">https://api.socketing.jeein.xyz/api/v1/orders/api/json</span>
+</code></pre></div></div>
 
 <p>이렇게 하면 다음과 같이 Spring Gateway Server의 Swagger ui에서 마이크로 서비스들의 Swagger 문서를 한곳에 모아 볼 수 있습니다.</p>
 
 <p><img src="/assets/images/swagger-source.png" alt="swagger-source" /></p>
 
-<h3 id="애노테이션-방식과-yml-방식">애노테이션 방식과 <code class="language-plaintext highlighter-rouge">yml</code> 방식</h3>
+<h3 id="애노테이션-방식과-직접-문서를-생성하는-방식">애노테이션 방식과 직접 문서를 생성하는 방식</h3>
 
 <p>Swagger가 자동으로 문서를 생성해주기는 하지만 description이나 example 그리고 예외 응답들을 관리하려면 추가적인 작업이 필요합니다.
 소스 코드에 애노테이션을 추가하거나
@@ -199,7 +199,7 @@ springdoc:
 
 <p>이번에는 Spring Rest Docs로 문서를 생성하는 방법입니다.
 Swagger 문서는 장점이 정말 많지만 자세한 설명을 추가하려고 하면 main 코드를 건들여야 되거나 문서를 직접 작성해야 한다는 점이 단점으로 다가옵니다.<br />
-Spring Rest Docs의 경우 test 코드를 작성하고 나서 테스트에 성공하고 나면 자동으로 Http 요청과 응답 snippet을 생성할 수 있습니다.<br />
+Spring Rest Docs의 경우 test 코드를 작성하고 나서 테스트에 성공하고 나면 자동으로 Http 요청과 응답 snippet을 생성할 수 있습니다.
 그리고 Gradle에서 asciidocTask를 이용하면 adoc 포맷의 문서를 html로 변환할 수도 있습니다.</p>
 
 <p>테스트와 문서 작업을 통합하는 이 방식은 문서의 신뢰성도 확보하고 api가 변경될 때마다 이를 문서에 자동 반영할 수 있으며 main 소스 코드에 문서화 코드를 개입시키지 않을 수도 있어서  장점이 많은 방식입니다.</p>
