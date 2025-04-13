@@ -1,8 +1,8 @@
 ---
 title: '코드 스타일 적용 자동화하기: Spotless, Checkstyle, editorconfig'
 date: 2025-04-11
-categories: [Code Formatting]
-tags: [Gradle, Git, Collaboration, Java]
+categories: [Review]
+tags: [Java, Gradle, Collaboration, Git, Formatting, Clean code]
 ---
 
 ## 요약
@@ -58,8 +58,8 @@ IDE가 eclipse인지 intellij인지에 따라 차이가 있습니다.
 저는 [구글 코드 스타일](https://google.github.io/styleguide/javaguide.html)을 사용하되, indent size는 4로 조정한 코드 스타일을 사용하였습니다.
 
 <details>
-  <summary>Google과 네이버 핵데이 행사의 Java 코드 스타일 설정 파일</summary>
-  <h4>Google Code Style 설정 파일</h4>
+  <summary>▶️ Google과 네이버 핵데이 행사의 Java 코드 스타일 설정 파일</summary>
+  <p>Google Code Style 설정 파일</p>
   <ul>
     <li>Eclipse version</li>
     <ul>
@@ -79,7 +79,7 @@ IDE가 eclipse인지 intellij인지에 따라 차이가 있습니다.
     </ul>
   </ul>
 
-  <h4>네이버 핵데이 행사의 Code Style 설정 파일</h4>
+  <p>네이버 핵데이 행사의 Code Style 설정 파일</p>
   <ul>
     <li>Eclipse version</li>
     <ul>
