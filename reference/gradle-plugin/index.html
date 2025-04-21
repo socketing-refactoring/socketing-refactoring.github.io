@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[Gradle] 플러그인 기초 | Socketing Reactoring Dev Log</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+  </head>
+  <body>
+    <header class="page-header" role="banner">
+      <h1 class="project-name"><a href="/" style="color: #fff">Socketing Reactoring Dev Log</a></h1>
+      <h2 class="project-tagline">Socketing 프로젝트 리팩토링 과정을 기록합니다.</h2>
+      <nav>
+        <a class="btn" href="/">Home</a>
+        <a class="btn" href="/tags/">Tags</a>
+        <a class="btn" href="/categories/">Categories</a>
+      </nav>
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <article>
+  <h1>[Gradle] 플러그인 기초</h1>
+  <p>
+    <small>
+      📅 2025-04-21
+       | 📂 카테고리: 
+        
+          <a href="/categories/reference/">Reference</a>
+        
+      
+       | 🏷️ 태그: 
+        
+          <a href="/tags/java/">Java</a>, 
+        
+          <a href="/tags/gradle/">Gradle</a>, 
+        
+          <a href="/tags/spring-boot/">Spring boot</a>
+        
+      
+    </small>
+  </p>
+
+  <div class="post-content">
+
+    <div class="toc-wrapper">
+      <div class="toc-container" id="tocContainer">
+        <p>목차</p>
+        <ul><li><a href="#gradle-플러그인-기초">Gradle 플러그인 기초</a><ul><li><a href="#플러그인-배포판">플러그인 배포판</a></li><li><a href="#플러그인-적용하기-applying-plugins">플러그인 적용하기 Applying plugins</a></li><li><a href="#1-core-plugins">1. Core plugins</a></li><li><a href="#2-community-plugins">2. Community Plugins</a></li><li><a href="#3-local-plugins">3. Local Plugins</a></li></ul></li></ul>
+      </div>
+      <button class="toc-toggle-btn" id="tocToggleBtn">더 보기</button>
+    </div>
+
+    <blockquote>
+  <p><strong>Gradle 8.13 공식문서</strong> &gt; Gradle 빌드 실행하기 &gt; 기초 학습 &gt; 8. 플러그인 기초<br />
+<a href="https://docs.gradle.org/current/userguide/plugin_basics.html">https://docs.gradle.org/current/userguide/plugin_basics.html</a></p>
+</blockquote>
+
+<h2 id="gradle-플러그인-기초">Gradle 플러그인 기초</h2>
+
+<p>Gradle은 플러그인 시스템 위에 만들어졌다. Gradle의 주요한 구성 요소는 정교한 의존성 결정 엔진 등의 infrastructure이고, 그 외 나머지 기능은 플러그인이 제공한다.<br />
+플러그인은 Gradle의 빌드 시스템에 추가적인 기능을 제공하는 소프트웨어이다.</p>
+
+<p><img src="/assets/images/gradle-plugin.png" alt="gradle plugin" /></p>
+
+<p>Gradle 빌드 스크립트에 플러그인을 추가하면 새로운 태스크, 설정 또는 다른 빌드 관련 기능을 추가할 수 있다.</p>
+
+<p>Java Library 플러그인 - <code class="language-plaintext highlighter-rouge">java-library</code></p>
+<ul>
+  <li>Java Libray들을 정의하고 빌드하기 위해 사용됨</li>
+  <li><code class="language-plaintext highlighter-rouge">compileJava</code> 태스크로 Java 소스 코드를 컴파일함</li>
+  <li><code class="language-plaintext highlighter-rouge">javadoc</code> 태스크로 <code class="language-plaintext highlighter-rouge">javadoc</code> 태스크를 생성함</li>
+  <li><code class="language-plaintext highlighter-rouge">jar</code> 태스크로 컴파일된 클래스들을 JAR 파일에 패키징함</li>
+</ul>
+
+<p>Google Services Gradle 플러그인 - <code class="language-plaintext highlighter-rouge">com.google.gms:google-service</code></p>
+<ul>
+  <li>안드로이드 앱에서 Google API와 Firebase 서비스를 사용할 수 있게 함</li>
+  <li><code class="language-plaintext highlighter-rouge">googleServices{}</code>라는 설정 블록과 <code class="language-plaintext highlighter-rouge">generateReleaseAssets</code>라는 태스크를 이용함</li>
+</ul>
+
+<p>Gradle Bintray 플러그인 - <code class="language-plaintext highlighter-rouge">com.jfrog.bintray</code></p>
+<ul>
+  <li>Bintray에 artifact를 배포할 수 있게 함</li>
+  <li><code class="language-plaintext highlighter-rouge">bintray{}</code> 블록으로 플러그인을 설정해야 함</li>
+</ul>
+
+<h3 id="플러그인-배포판">플러그인 배포판</h3>
+<p>플러그인은 다음 3가지 방법으로 배포된다.</p>
+<ol>
+  <li>Core plugins
+    <ul>
+      <li>Gradle에서 Core Plugin을 개발하고 운영함</li>
+    </ul>
+  </li>
+  <li>Community plugins
+    <ul>
+      <li>Gradle의 커뮤니티가 Gradle Plugin Portal을 통해 플러그인을 공유함</li>
+    </ul>
+  </li>
+  <li>Local plugins
+    <ul>
+      <li>사용자가 API를 이용하여 커스텀 플러그인을 생성함</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="플러그인-적용하기-applying-plugins">플러그인 적용하기 Applying plugins</h3>
+<p>프로젝트에 플러그인을 적용하면 프로젝트의 기능을 확장할 수 있다.
+plugin id (전역적으로 고유한 식별자)와 버전을 이용하여 빌드 스크립트에 플러그인을 추가할 수 있다.</p>
+
+<p><strong>build.gradle 예시</strong></p>
+
+<pre><code class="language-Gradle">plugins {
+    id «plugin id» version «plugin version»
+}
+</code></pre>
+
+<h3 id="1-core-plugins">1. Core plugins</h3>
+<p>Gradle Core plugin은 Gradle 배포판에 포함되어 있는 플러그인들이다.
+이 플러그인들은 프로젝트를 빌드하고 관리하는 데 핵심적인 기능을 제공한다.</p>
+
+<p>core plugin의 예는 다음과 같다.</p>
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">java</code>: Java 프로젝트 빌드를 지원</li>
+  <li><code class="language-plaintext highlighter-rouge">groovy</code>: Groovy 소스 파일을 컴파일하고 테스트하는 것을 지원</li>
+  <li><code class="language-plaintext highlighter-rouge">ear</code>: 기업 애플리케이션을 위한 EAR 파일 빌드를 지원</li>
+</ul>
+
+<p>core plugin은 빌드 스크립트에서 핵심 <code class="language-plaintext highlighter-rouge">JavaPlugin</code>에 대해 <code class="language-plaintext highlighter-rouge">java</code>를 사용하듯이 짧은 이름을 사용할 수 있다는 점에서 특별하다.
+또한 이들은 버전을 명시하지 않아도 된다.</p>
+
+<p><strong>build.gradle.kts 예시</strong></p>
+
+<pre><code class="language-Gradle">plugins {
+    id("java")
+}
+</code></pre>
+
+<p>사용자가 사용할 수 있는 다양한 Core plugin은 <a href="https://docs.gradle.org/current/userguide/plugin_reference.html#plugin_reference">여기</a>에서 확인할 수 있다.</p>
+
+<h3 id="2-community-plugins">2. Community Plugins</h3>
+<p>Community plugin은 Gradle community에 의해 개발된 플러그인이다.
+이 플러그인은 특정 use case나 기술에 특화된 기능을 제공한다.<br />
+Spring boot Gradle Plugin은 실행 가능한 Jar 또는 War 아카이브를 패키징하고 Spring boot Java 애플리케이션을 실행시킨다.</p>
+
+<p>프로젝트에 <code class="language-plaintext highlighter-rouge">org.springframework.boot</code> 플러그인을 추가하려면 다음과 같이 하면 된다.</p>
+
+<p><strong>build.gradle.kts</strong></p>
+
+<pre><code class="language-Gradle">plugins {
+    id("org.springframework.boot") version "3.1.5"
+}
+</code></pre>
+
+<p>Community 플러그인은 Gradle Plugin Portal에 배포될 수 있다.</p>
+
+<h3 id="3-local-plugins">3. Local Plugins</h3>
+<p>커스텀 또는 로컬 플러그인은 특정 프로젝트나 기관 내에서 개발되고 사용된다. 이 플러그들은 공개적으로 공유되지 않으며 
+프로젝트나 조직의 특수한 요구에 맞게 커스텀된다.<br />
+로컬 플러그인은 공통 빌드 로직을 캡슐화하고 내부 시스템 또는 도구와의 연동을 제공하고, 복잡한 기능을 재사용 가능한 컴포넌트에 추상화할 수 있다.</p>
+
+<p>Gradle은 사용자가 API를 이용하여 커스텀 플러그인을 개발하는 것을 가능하게 해준다.
+당신만의 플러그인을 만들기 위하여 일반적으로 당신은 다음과 같은 단계를 따를 것이다.</p>
+
+<ol>
+  <li>플러그인 클래스를 정의하기: <code class="language-plaintext highlighter-rouge">Plugin&lt;Project&gt;</code> 인터페이스를 구현하는 새로운 클래스를 생성한다.</li>
+</ol>
+
+<pre><code class="language-Gradle">class HelloPlugin : Plugin&lt;Project&gt; {
+    override fun apply(project: Project) {
+        // Define the 'hello' task
+        val helloTask = project.tasks.register("hello") {
+            doLast {
+                println("Hello, Gradle!")
+            }
+        }
+    }
+}
+</code></pre>
+
+<ol>
+  <li>플러그인을 빌드하고 선택에 따라 플러그인을 배포하기: 당신의 플러그인 코드를 포함하는 JAR 파일을 생성하고 선택에 따라 이 JAR 파일을 다른 프로젝트에서 재사용될 수 있도록 로컬 또는 원격 리포지토리에 배포한다.</li>
+</ol>
+
+<pre><code class="language-Gradle">// Publish the plugin
+plugins {
+    `maven-publish`
+}
+
+
+publishing {
+    publications {
+        create&lt;MavenPublication&gt;("mavenJava") {
+            from(components["java"])
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
+</code></pre>
+
+<ol>
+  <li>당신의 플러그인을 적용하기: 플러그인을 사용하고 싶다면 플러그인 ID와 버전을 빌드 파일의 <code class="language-plaintext highlighter-rouge">plugin{}</code> 블록에 포함시킨다.</li>
+</ol>
+
+<pre><code class="language-Gradle">// Apply the plugin
+plugins {
+    id("com.example.hello") version "1.0"
+}
+</code></pre>
+
+<p>플러그인 개발과 관련하여 더 자세한 내용은 <a href="https://docs.gradle.org/current/userguide/custom_plugins.html#custom_plugins">다음 문서</a>에서 
+확인할 수 있다.</p>
+
+  </div>
+</article>
+
+<hr>
+
+<p><a href="/">← 돌아가기</a></p>
+
+<script src="/assets/js/toc-toggle.js"></script>
+
+
+      <button id="topBtn" title="Go to top">↑ Top</button>
+      <footer class="site-footer">
+        <p>&copy; 2025 Socketing Reactoring Dev Log. Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a>.</p>
+      </footer>
+    </main>
+    <script src="/assets/js/top-button.js"></script>
+  </body>
+</html>

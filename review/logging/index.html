@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>분산 환경의 로깅 시스템 구축: Logback, Filebeat, ELK | Socketing Reactoring Dev Log</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preload" href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" as="style" type="text/css" crossorigin>
+    <meta name="theme-color" content="#157878">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+  </head>
+  <body>
+    <header class="page-header" role="banner">
+      <h1 class="project-name"><a href="/" style="color: #fff">Socketing Reactoring Dev Log</a></h1>
+      <h2 class="project-tagline">Socketing 프로젝트 리팩토링 과정을 기록합니다.</h2>
+      <nav>
+        <a class="btn" href="/">Home</a>
+        <a class="btn" href="/tags/">Tags</a>
+        <a class="btn" href="/categories/">Categories</a>
+      </nav>
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      <article>
+  <h1>분산 환경의 로깅 시스템 구축: Logback, Filebeat, ELK</h1>
+  <p>
+    <small>
+      📅 2025-04-14
+       | 📂 카테고리: 
+        
+          <a href="/categories/review/">Review</a>
+        
+      
+       | 🏷️ 태그: 
+        
+          <a href="/tags/java/">Java</a>, 
+        
+          <a href="/tags/spring-boot/">Spring boot</a>, 
+        
+          <a href="/tags/collaboration/">Collaboration</a>, 
+        
+          <a href="/tags/msa/">MSA</a>, 
+        
+          <a href="/tags/docker/">Docker</a>
+        
+      
+    </small>
+  </p>
+
+  <div class="post-content">
+
+    <div class="toc-wrapper">
+      <div class="toc-container" id="tocContainer">
+        <p>목차</p>
+        <ul><li><a href="#도입-배경">도입 배경</a></li><li><a href="#spring-boot-로깅-설정">Spring boot 로깅 설정</a><ul><li><a href="#applicationyml에서-설정">application.yml에서 설정</a></li><li><a href="#logback-springxml에서-설정">logback-spring.xml에서 설정</a></li></ul></li><li><a href="#docker-환경을-고려한-로깅-경로-설정">Docker 환경을 고려한 로깅 경로 설정</a></li><li><a href="#분산-환경의-로깅-시스템">분산 환경의 로깅 시스템</a><ul><li><a href="#filebeat-설정">Filebeat 설정</a></li></ul></li><li><a href="#elk-스택-구축">ELK 스택 구축</a></li><li><a href="#리뷰">리뷰</a></li></ul>
+      </div>
+      <button class="toc-toggle-btn" id="tocToggleBtn">더 보기</button>
+    </div>
+
+    <h2 id="도입-배경">도입 배경</h2>
+
+<p>예상치 못한 에러에 빠르게 대응하기 위해서 로깅 시스템 구축은 중요하다고 생각합니다. 그리고 분산 환경의 경우 서버 인스턴스들이 여러 개가 될 수 있기 때문에 각 인스턴스에 직접 접속하지 않고도 해당 인스턴스들의 로그를 중앙집중식으로 관리할 수 있도록 분산 환경 로깅 시스템을 구축하는 것이 필요합니다.</p>
+
+<p>저는 Spring boot의 SLF4J (Simple Logging Facade for Java)의 구현체인 Logback을 이용하여 로깅 설정을 커스텀하였습니다. 그리고 Filebeat + ELK 스택을 이용하여 마이크로 서비스의 로그를 로깅 서버로 전송하여 로깅 서버 한곳에서 모든 서비스의 로그를 관리할 수 있는 로깅 시스템을 구축해보았습니다.</p>
+
+<h2 id="spring-boot-로깅-설정">Spring boot 로깅 설정</h2>
+
+<p>Spring boot 로깅에 대한 간단한 설명은 다음 공식 문서에서 확인할 수 있습니다.</p>
+<blockquote>
+  <p>Spring boot Logging 문서 <a href="https://docs.spring.io/spring-boot/how-to/logging.html">https://docs.spring.io/spring-boot/how-to/logging.html</a></p>
+</blockquote>
+
+<p>Logback을 이용하려면 logging starter 의존성을 추가하여 Logback과 spring-jcl을 클래스 경로에 추가해야 하는데 spring-boot-starter-web 의존성을 추가하면 logging starter 의존성도 자동으로 추가할 수 있다고 합니다.<br />
+스프링 부트는 LoggingSystem 추상 계층이 있어서 이 계층이 클래스 경로에 있는 콘텐츠를 바탕으로 로깅을 구성하는데 만약 Logback이 있다면 Logback을 기본적으로 선택한다고 합니다.</p>
+
+<h3 id="applicationyml에서-설정">application.yml에서 설정</h3>
+
+<p>Spring boot에서 로깅 설정을 간단하게 커스텀하고 싶다면 <code class="language-plaintext highlighter-rouge">application.yml</code>에 설정을 추가하면 됩니다.</p>
+
+<p>예를 들어 다음과 같이 클래스별로 로깅 레벨을 다르게 설정할 수 있습니다.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># application.yml</span>
+
+<span class="c1"># 생략</span>
+
+<span class="na">logging</span><span class="pi">:</span>
+  <span class="na">level</span><span class="pi">:</span>
+    <span class="na">org.springframework.web</span><span class="pi">:</span> <span class="s">DEBUG</span>
+    <span class="na">org.hibernate.SQL</span><span class="pi">:</span> <span class="s">DEBUG</span>
+    <span class="na">org.hibernate.orm.jdbc.bind</span><span class="pi">:</span> <span class="s">TRACE</span>
+</code></pre></div></div>
+
+<h3 id="logback-springxml에서-설정">logback-spring.xml에서 설정</h3>
+
+<p>만약 조금 더 디테일하게 로깅 설정을 커스텀하고 싶다면, 그리고 Logback 로깅 구현체를 사용하고 있다면 <code class="language-plaintext highlighter-rouge">src/main/resources</code> 경로에 <code class="language-plaintext highlighter-rouge">logback-spring.xml</code> 파일을 두어 spring에 특화된 Logback 설정을 추가할 수 있습니다.</p>
+
+<p>다음 공식 문서를 통해 설정 방법을 확인할 수 있습니다.</p>
+
+<blockquote>
+  <p>Logback 공식 문서 <a href="https://logback.qos.ch/manual/appenders.html">https://logback.qos.ch/manual/appenders.html</a></p>
+</blockquote>
+
+<p>저는 다음과 같이 로깅 설정을 해주었습니다.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">property</code> 태그를 이용하여 설정 파일에서 변수처럼 사용할 LOG_PATTERN과 LOG_PATH (로그 파일 생성 경로) 등록</li>
+</ul>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- src/main/resources/logback-spring.xml --&gt;</span>
+
+<span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"LOG_PATTERN"</span>
+		<span class="na">value=</span><span class="s">"[%d{yyyy-MM-dd HH:mm:ss}][%thread] %-5level %logger - %msg%n"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"LOG_PATH"</span> <span class="na">value=</span><span class="s">"logs"</span> <span class="nt">/&gt;</span>
+
+  <span class="c">&lt;!-- 생략 --&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">appender</code> 태그를 이용하여 rolling policy 설정</li>
+</ul>
+
+<p><code class="language-plaintext highlighter-rouge">appender</code> 태그를 이용하여 일반적인 콘솔 로깅, API 로깅, JDBC 로깅, GENERAL 로깅 시 각각 다른 로깅 전략을 사용할 수 있게 설정해주었습니다. 각각의 상황마다 다르게 설정한 부분은 실시간 로깅 파일의 경로를 설정하는 <code class="language-plaintext highlighter-rouge">file</code>과 오래된 로그를 어떻게 압축하고 삭제할지 정하는 <code class="language-plaintext highlighter-rouge">rollingPolicy</code> 부분입니다.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c">&lt;!-- src/main/resources/logback-spring.xml --&gt;</span>
+
+<span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+
+    <span class="c">&lt;!-- 생략 --&gt;</span>
+
+	<span class="c">&lt;!-- 콘솔 로그 --&gt;</span>
+	<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"CONSOLE"</span>
+		<span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;encoder&gt;</span>
+			<span class="nt">&lt;pattern&gt;</span>${LOG_PATTERN}<span class="nt">&lt;/pattern&gt;</span>
+		<span class="nt">&lt;/encoder&gt;</span>
+	<span class="nt">&lt;/appender&gt;</span>
+
+	<span class="c">&lt;!-- API 로그 파일 --&gt;</span>
+	<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"API_LOG"</span>
+		<span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.RollingFileAppender"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;file&gt;</span>${LOG_PATH}/api.log<span class="nt">&lt;/file&gt;</span>
+		<span class="nt">&lt;encoder&gt;</span>
+			<span class="nt">&lt;pattern&gt;</span>${LOG_PATTERN}<span class="nt">&lt;/pattern&gt;</span>
+		<span class="nt">&lt;/encoder&gt;</span>
+		<span class="nt">&lt;rollingPolicy</span>
+			<span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;fileNamePattern&gt;</span>${LOG_PATH}/%d{yyyy-MM,
+				aux}/api-%d{yyyy-MM-dd}.log.gz<span class="nt">&lt;/fileNamePattern&gt;</span>
+			<span class="nt">&lt;maxHistory&gt;</span>30<span class="nt">&lt;/maxHistory&gt;</span>
+		<span class="nt">&lt;/rollingPolicy&gt;</span>
+	<span class="nt">&lt;/appender&gt;</span>
+
+    <span class="c">&lt;!-- 생략 --&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<p>Rolling Policy의 경우 로그 파일의 용량 기준 또는 시간 기준으로 관리할 수 있습니다. 저는 하루 단위로 로그 파일이 압축되게 하였고 압축 파일들은 월별 폴더에서 관리되게 하였습니다. 로그 파일의 최대 저장 기간은 30일로, 30일이 지난 로그들은 자동 삭제됩니다.<br />
+이렇게 로깅을 설정하면 다음과 같은 식으로 로그가 관리됩니다.<br />
+<img src="/assets/images/logback-rolling.png" alt="log-rolling" /></p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">springProfile</code>과 `logger’를 이용하여 프로파일별 로깅 설정 (로깅 대상 클래스, 로깅 레벨 설정)</li>
+</ul>
+
+<p>스프링 프로파일별로 다른 로깅 설정을 사용할 수 있습니다. 배포 서버에서의 로깅의 경우 서버 성능을 위해 콘솔에는 로깅하지 않는 것이 좋다고 하여 저는 배포 서버인 dev 프로파일의 로깅의 경우 콘솔에 출력하는 로깅은 사용하지 않았습니다.<br />
+<code class="language-plaintext highlighter-rouge">logger</code>는 “ROOT”로 설정하면 모든 클래스를 대상으로 로깅이 실행됩니다. 클래스별로 로깅 레벨을 다르게 설정하고 싶다면 다음과 같이 <code class="language-plaintext highlighter-rouge">logger</code>를 추가해주면 됩니다. 그리고 어떤 클래스에 대해서 특정 <code class="language-plaintext highlighter-rouge">logger</code>로 로그를 출력했다면 “ROOT” logger에는 출력되지 않게 하고 싶다면 <code class="language-plaintext highlighter-rouge">logger</code>에 <code class="language-plaintext highlighter-rouge">additivity="false"</code> 속성을 추가해주면 됩니다.</p>
+
+<p>다음은 저의 dev 프로파일의 로깅 설정입니다.</p>
+
+<div class="language-xml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+    <span class="c">&lt;!-- 생략 --&gt;</span>
+
+	<span class="c">&lt;!-- dev 프로파일 로깅 설정 --&gt;</span>
+	<span class="nt">&lt;springProfile</span> <span class="na">name=</span><span class="s">"dev"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"org.hibernate.SQL"</span> <span class="na">level=</span><span class="s">"TRACE"</span>
+			<span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"JDBC_LOG"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/logger&gt;</span>
+
+		<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"org.hibernate.orm.schema"</span> <span class="na">level=</span><span class="s">"TRACE"</span>
+			<span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"JDBC_LOG"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/logger&gt;</span>
+
+		<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"com.jeein.member.LoggingFilter"</span> <span class="na">level=</span><span class="s">"INFO"</span>
+			<span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"API_LOG"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/logger&gt;</span>
+
+		<span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"ROOT"</span> <span class="na">level=</span><span class="s">"INFO"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"GENERAL_LOG"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/logger&gt;</span>
+	<span class="nt">&lt;/springProfile&gt;</span>
+
+    <span class="c">&lt;!-- 생략 --&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre></div></div>
+
+<p>최종적으로 저는 개발용 서버에서 다음과 같이 로그가 출력되고 있습니다.
+<img src="/assets/images/api-log.png" alt="api-log" />
+<img src="/assets/images/jdbc-log.png" alt="jdbc-log" />
+<img src="/assets/images/general-log.png" alt="general-log" /></p>
+
+<h2 id="docker-환경을-고려한-로깅-경로-설정">Docker 환경을 고려한 로깅 경로 설정</h2>
+
+<p>저는 배포 서버에서 Docker를 이용하여 스프링 부트 애플리케이션을 운영하고 있습니다. Docker 안에서 실행되는 스프링 부트 애플리케이션이 생성하는 로그를 Docker 외부에서도 접근할 수 있게 하기 위하여 Docker volume 설정을 해주었습니다.<br />
+Spring boot 프로젝트에서 로그 파일 경로를 <code class="language-plaintext highlighter-rouge">logs</code>로 설정하면 Docker 컨테이너 내부에서 <code class="language-plaintext highlighter-rouge">/app/logs</code> 위치에 로그가 저장됩니다. 이 경로의 파일이 Docker 외부인 서버와 연결될 수 있도록 <code class="language-plaintext highlighter-rouge">docker-compose.yml</code>에서 volumes를 <code class="language-plaintext highlighter-rouge">"./logs:/app/logs"</code>로 설정해주었습니다.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="na">services</span><span class="pi">:</span>
+  <span class="na">member</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s2">"</span><span class="s">${DOCKER_USERNAME}/socketing:member-service"</span>
+    <span class="na">network_mode</span><span class="pi">:</span> <span class="s2">"</span><span class="s">host"</span> <span class="c1"># required to register public ip to Spring Eureka </span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">member-service-app"</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s2">"</span><span class="s">./logs:/app/logs"</span>
+</code></pre></div></div>
+
+<h2 id="분산-환경의-로깅-시스템">분산 환경의 로깅 시스템</h2>
+
+<p>이제 마이크로 서비스 서버에 저장된 로그를 중앙집중식으로 관리하기 위해 로깅 서버로 보내는 방법을 알아보겠습니다.<br />
+Logback 공식 문서를 보면 Logback의 <code class="language-plaintext highlighter-rouge">appender</code> 설정을 통해서도 외부에 로그를 전송할 수 있는 방법이 있는 것으로 보였습니다. 그렇지만 저는 경량 로그 수집기인 Filebeat를 이용하여 Logback은 로그의 책임만 담당하고 로그를 외부로 전송하는 책임은 Filebeat에 두고자 하였습니다.<br />
+그리고 로깅 서버에서 로그를 인덱싱할 때는 json 형식의 로그가 필요하기 때문에 로그를 json으로 변환하는 과정이 어디엔가 필요합니다. 이를 위해 Logback에서 로그를 json으로 출력하게 설정하는 방법이 있고 또는 로깅 서버에서 Logstash가 일반 로그를 json으로 변환하게 하는 방법이 있습니다.<br />
+두 방법 모두 장단점이 있지만 저는 로깅 서버에서 로그를 유연하게 파싱할 수 있게 하기 위해 Logstash 방법을 선택해보았습니다.</p>
+
+<h3 id="filebeat-설정">Filebeat 설정</h3>
+
+<p>마이크로 서비스가 위치한 서버에 docker-compose.yml을 이용하여 Filebeat 도커 컨테이너를 실행시킵니다. 도커를 이용한 이유는 한 번 docker-compose 파일을 작성해두면 다른 마이크로 서비스에서 다시 활용하기 좋기 때문입니다.</p>
+
+<p>다음은 Filebeat 컨테이너 생성을 위한 docker-compose.yml 설정입니다.<br />
+Filebeat 도커 컨테이너에서 도커 외부에 있는 Spring boot가 생성한 로그에 접근할 수 있도록 volume을 설정해줍니다. 그리고 Filebeat에서 사용할 설정 정보를 Docker 내부의 Filebeat가 읽을 수 있게 volume을 설정해줍니다.<br />
+STACK_VERSION은 <code class="language-plaintext highlighter-rouge">.env</code> 파일에서 관리하였습니다.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># docker-compose.yml</span>
+
+<span class="na">services</span><span class="pi">:</span>
+  <span class="na">filebeat</span><span class="pi">:</span>
+    <span class="na">image</span><span class="pi">:</span> <span class="s">docker.elastic.co/beats/filebeat:${STACK_VERSION}</span>
+    <span class="na">container_name</span><span class="pi">:</span> <span class="s">filebeat-container</span>
+    <span class="na">volumes</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">./logs:/var/log/app</span>
+      <span class="pi">-</span> <span class="s">./filebeat.yml:/usr/share/filebeat/filebeat.yml:ro</span> <span class="c1"># read only</span>
+</code></pre></div></div>
+
+<p>다음은 filebeat 설정을 위한 filebeat.yml 파일입니다.</p>
+
+<div class="language-yml highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># filebeat.yml</span>
+
+<span class="na">filebeat.inputs</span><span class="pi">:</span>
+  <span class="pi">-</span> <span class="na">type</span><span class="pi">:</span> <span class="s">log</span>
+    <span class="na">enabled</span><span class="pi">:</span> <span class="kc">true</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">/var/log/app/api.log</span>
+    <span class="na">fields</span><span class="pi">:</span>
+      <span class="na">server_name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">member-service"</span>
+      <span class="na">environment</span><span class="pi">:</span> <span class="s2">"</span><span class="s">dev"</span>
+      <span class="na">log_type</span><span class="pi">:</span> <span class="s">api</span>
+    <span class="na">fields_under_root</span><span class="pi">:</span> <span class="kc">true</span>
+
+  <span class="pi">-</span> <span class="na">type</span><span class="pi">:</span> <span class="s">log</span>
+    <span class="na">enabled</span><span class="pi">:</span> <span class="kc">true</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">/var/log/app/general.log</span>
+    <span class="na">fields</span><span class="pi">:</span>
+      <span class="na">server_name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">member-service"</span>
+      <span class="na">environment</span><span class="pi">:</span> <span class="s2">"</span><span class="s">dev"</span>
+      <span class="na">log_type</span><span class="pi">:</span> <span class="s">general</span>
+    <span class="na">fields_under_root</span><span class="pi">:</span> <span class="kc">true</span>
+
+  <span class="pi">-</span> <span class="na">type</span><span class="pi">:</span> <span class="s">log</span>
+    <span class="na">enabled</span><span class="pi">:</span> <span class="kc">true</span>
+    <span class="na">paths</span><span class="pi">:</span>
+      <span class="pi">-</span> <span class="s">/var/log/app/jdbc.log</span>
+    <span class="na">fields</span><span class="pi">:</span>
+      <span class="na">server_name</span><span class="pi">:</span> <span class="s2">"</span><span class="s">member-service"</span>
+      <span class="na">environment</span><span class="pi">:</span> <span class="s2">"</span><span class="s">dev"</span>
+      <span class="na">log_type</span><span class="pi">:</span> <span class="s">jdbc</span>
+    <span class="na">fields_under_root</span><span class="pi">:</span> <span class="kc">true</span>
+
+<span class="na">output.logstash</span><span class="pi">:</span>
+  <span class="na">hosts</span><span class="pi">:</span> <span class="pi">[</span><span class="s2">"</span><span class="s">logstash:5044"</span><span class="pi">]</span>
+</code></pre></div></div>
+
+<h2 id="elk-스택-구축">ELK 스택 구축</h2>
+
+<p>ELK 스택 구축 다음 레퍼런스를 참고했다.</p>
+
+<p>몇 가지 시행착오들이 있었다.</p>
+
+<h2 id="리뷰">리뷰</h2>
+
+  </div>
+</article>
+
+<hr>
+
+<p><a href="/">← 돌아가기</a></p>
+
+<script src="/assets/js/toc-toggle.js"></script>
+
+
+      <button id="topBtn" title="Go to top">↑ Top</button>
+      <footer class="site-footer">
+        <p>&copy; 2025 Socketing Reactoring Dev Log. Powered by <a href="https://jekyllrb.com" target="_blank">Jekyll</a>.</p>
+      </footer>
+    </main>
+    <script src="/assets/js/top-button.js"></script>
+  </body>
+</html>
