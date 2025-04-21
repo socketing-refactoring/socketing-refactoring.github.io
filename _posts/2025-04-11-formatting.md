@@ -2,7 +2,7 @@
 title: '코드 스타일 적용 자동화하기: Spotless, Checkstyle, editorconfig'
 date: 2025-04-11
 categories: [Review]
-tags: [Java, Gradle, Collaboration, Git, Formatting, Clean code]
+tags: [Java, Spring boot, Gradle, Collaboration, Git, Formatting, Clean code]
 ---
 
 ## 요약
