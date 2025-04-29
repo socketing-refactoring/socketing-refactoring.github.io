@@ -9,6 +9,9 @@ title: home
   <li>
     <a href="/docs/member-service/">Member Service</a>
   </li>
+  <li>
+    <a href="/docs/event-service/index.html">Event Service</a>
+  </li>
 </ul>
 
 <h2>최근 포스트</h2>
